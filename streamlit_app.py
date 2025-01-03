@@ -125,6 +125,7 @@ def enable_submit_button():
 def reset_symptom():
     # Reset the symptom-related state to allow new entry
     st.session_state.button_disabled = False
+    st.session_state.submit_disabled = False
     st.session_state.pop("symptom", None)
     st.session_state.pop("context", None)
     st.session_state.pop("follow_up_questions", None)
@@ -136,17 +137,23 @@ def reset_symptom():
 with st.form("symptom_form"):
     symptom = st.text_input("Please describe your primary symptom:", value=st.session_state.get("symptom", ""))
     # Button is disabled based on session state
+    
     symptom_submitted = st.form_submit_button(
         label="Submit", 
-        disabled=st.session_state.button_disabled,
+        disabled=st.session_state.button_disabled if symptom else False, 
         on_click=disable_button  # Disable the button once clicked
     )
 
 # Store state to avoid resetting data
-if symptom_submitted and symptom:
-    st.session_state["symptom"] = symptom
-    st.session_state["context"] = retrieve_relevant_data(symptom)
-    st.session_state["follow_up_questions"] = generate_follow_up_questions(symptom, st.session_state["context"])
+
+if symptom_submitted:
+    if not symptom:
+        st.error("Please enter a symptom.") 
+    else:
+        st.session_state["symptom"] = symptom
+        with st.spinner('Follow-up questions processing...'):
+            st.session_state["context"] = retrieve_relevant_data(symptom)  # Replace with your actual function
+            st.session_state["follow_up_questions"] = generate_follow_up_questions(symptom, st.session_state["context"])  # Replace with your actual function
 
 if "symptom" in st.session_state:
     # Retrieve saved state
@@ -170,16 +177,17 @@ if "symptom" in st.session_state:
          
 
         if follow_up_submitted:
-            # Save responses in session_state
-            st.session_state["responses"] = responses
+                # Save responses in session_state
+                st.session_state["responses"] = responses
 
-            # Generate diagnosis
-            diagnosis = generate_diagnosis(
-                symptom,
-                st.session_state["responses"],
-                context
-            )
-            st.session_state["diagnosis"] = diagnosis
+                with st.spinner('Generating diagnosis...'): 
+                    # Generate diagnosis (Replace with your actual function)
+                    diagnosis = generate_diagnosis(
+                        symptom, 
+                        st.session_state["responses"], 
+                        context 
+                    )
+                st.session_state["diagnosis"] = diagnosis
 
 if "diagnosis" in st.session_state:
     st.subheader("Diagnosis")
