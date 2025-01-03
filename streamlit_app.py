@@ -12,7 +12,7 @@ api_key = "LA-3ce8ae4f560140d2843c9620a42a97d59c8d672f39d34838b68c6f0d3eea8c24"
 
 # Initialize OpenAI client
 client = OpenAI(
-    base_url='http://localhost:11434/v1/',
+    base_url='https://api.openai.com/v1/',
     api_key=api_key,
 )
 
