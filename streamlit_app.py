@@ -8,7 +8,7 @@ import os
 from fuzzywuzzy import process
 # Load environment variables
 load_dotenv()  
-api_key = os.getenv("OPENAI_API_KEY")
+api_key = "LA-3ce8ae4f560140d2843c9620a42a97d59c8d672f39d34838b68c6f0d3eea8c24"
 
 # Initialize OpenAI client
 client = OpenAI(
