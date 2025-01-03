@@ -6,7 +6,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 from fuzzywuzzy import process
-# Load environment variables
+# Load environment variabless
 load_dotenv()  
 api_key = os.getenv("OPENAI_API_KEY")
 
